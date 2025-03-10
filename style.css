@@ -1,0 +1,4 @@
+#canvas {
+    border: 3px solid black; /* Bordure noire de 3px */
+    border-radius: 10px;     /* Coins arrondis */
+}
