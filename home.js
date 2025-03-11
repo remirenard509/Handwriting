@@ -139,21 +139,16 @@ class DrawingApp {
         });
     }
     save() {
-        this.beginsvg();
+        this.svgContent = '';
+        this.svgContent += '<?xml version="1.0" encoding="UTF-8"?>\n';
+        this.svgContent += '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="800" height="400">\n';
         for (let i = 0; i < this.history.length; i++) {
             let stroke = this.history[i];
             this.bodysvg(stroke);
         }
-        this.endsvg();
-        this.saveSvgToLocalStorage(this.svgContent);
-    }
-    beginsvg() {
-        this.svgContent = '';
-        this.svgContent += '<?xml version="1.0" encoding="UTF-8"?>\n';
-        this.svgContent += '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="800" height="400">\n';
-    }
-    endsvg() {
         this.svgContent += '</svg>';
+        this.saveSvgToLocalStorage(this.svgContent);
+        this.printSvg();
     }
 
     bodysvg(points) {
@@ -168,6 +163,12 @@ class DrawingApp {
     }
     loadSvgFromLocalStorage() {
         return localStorage.getItem('svgFile');
+    }
+
+    printSvg() {
+        let svgContent = this.loadSvgFromLocalStorage();
+        let win = window.open();
+        win.document.write(svgContent);
     }
 
     run() {
