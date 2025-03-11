@@ -10,6 +10,7 @@ class DrawingApp {
         this.redoHistory = [];
         this.autoSmooth = false;
         this.lineWidth = 5;
+        this.svgContent = '';
 
         this.init();
     }
@@ -27,6 +28,7 @@ class DrawingApp {
         document.getElementById('redo').addEventListener('click', () => this.redo());
         document.getElementById('clear').addEventListener('click', () => this.clear());
         document.getElementById('autoSmooth').addEventListener('change', (e) => this.toggleAutoSmooth(e));
+        document.getElementById('save').addEventListener('click', () => this.save());
     }
 
     startDrawing(e) {
@@ -135,6 +137,37 @@ class DrawingApp {
             this.ctx.stroke();
             this.ctx.closePath();
         });
+    }
+    save() {
+        this.beginsvg();
+        for (let i = 0; i < this.history.length; i++) {
+            let stroke = this.history[i];
+            this.bodysvg(stroke);
+        }
+        this.endsvg();
+        this.saveSvgToLocalStorage(this.svgContent);
+    }
+    beginsvg() {
+        this.svgContent = '';
+        this.svgContent += '<?xml version="1.0" encoding="UTF-8"?>\n';
+        this.svgContent += '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="800" height="400">\n';
+    }
+    endsvg() {
+        this.svgContent += '</svg>';
+    }
+
+    bodysvg(points) {
+        for (let i = 0; i < points.length - 1; i++) {
+            let p1 = points[i];
+            let p2 = points[i + 1];
+            this.svgContent += `<line x1="${p1.x}" y1="${p1.y}" x2="${p2.x}" y2="${p2.y}" stroke="black" stroke-width="2" />\n`;
+        }
+    }
+    saveSvgToLocalStorage(svgContent) {
+        localStorage.setItem('svgFile', svgContent);
+    }
+    loadSvgFromLocalStorage() {
+        return localStorage.getItem('svgFile');
     }
 
     run() {
