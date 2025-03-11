@@ -2,3 +2,27 @@
     border: 3px solid black; /* Bordure noire de 3px */
     border-radius: 10px;     /* Coins arrondis */
 }
+#app {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+    font-family: Arial, sans-serif;
+}
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
