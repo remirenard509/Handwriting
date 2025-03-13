@@ -27,7 +27,9 @@ class DrawingApp {
         document.getElementById('undo').addEventListener('click', () => this.undo());
         document.getElementById('redo').addEventListener('click', () => this.redo());
         document.getElementById('clear').addEventListener('click', () => this.clear());
-        document.getElementById('autoSmooth').addEventListener('change', (e) => this.toggleAutoSmooth(e));
+        document.getElementById('toggleAutoSmooth').addEventListener('click', () => {
+            this.autoSmooth = !this.autoSmooth;
+            toggleAutoSmooth.textContent = `autoSmooth: ${this.autoSmooth ? 'ON' : 'OFF'}`;});
         document.getElementById('save').addEventListener('click', () => this.save());
     }
 
@@ -121,10 +123,6 @@ class DrawingApp {
         this.history = [];
         this.redoHistory = [];
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    }
-
-    toggleAutoSmooth(e) {
-        this.autoSmooth = e.target.checked;
     }
 
     redrawCanvas() {
