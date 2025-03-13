@@ -1,7 +1,12 @@
 #canvas {
-    border: 3px solid black; /* Bordure noire de 3px */
-    border-radius: 10px;     /* Coins arrondis */
+    border: 3px solid black;
+    border-radius: 10px;  
 }
+
+h1 {
+    font-family: "Belleza", sans-serif;
+}
+
 #app {
     margin: 0;
     padding: 0;
@@ -11,18 +16,30 @@
     height: 100vh;
     background-color: #f0f0f0;
     font-family: Arial, sans-serif;
+    text-align: center;
+    flex-direction: row;
 }
+
+.buttons {
+    margin-right: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
 button {
-    padding: 10px 20px;
     font-size: 16px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    background-color: #007bff;
+    background-color: #314a4b;
     color: white;
     transition: background 0.3s;
+    width: 50px;
+    height: 50px;
+    margin-bottom: 10px;
 }
 
 button:hover {
-    background-color: #0056b3;
+    background-color: #577e80;
 }
+
