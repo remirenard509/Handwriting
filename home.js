@@ -29,8 +29,19 @@ class DrawingApp {
         document.getElementById('clear').addEventListener('click', () => this.clear());
         document.getElementById('toggleAutoSmooth').addEventListener('click', () => {
             this.autoSmooth = !this.autoSmooth;
-            toggleAutoSmooth.textContent = `autoSmooth: ${this.autoSmooth ? 'ON' : 'OFF'}`;});
+            this.smoothButtonStatus();
+    });
         document.getElementById('save').addEventListener('click', () => this.save());
+        document.getElementById('save').addEventListener('click', () => this.save());
+    }
+
+    smoothButtonStatus() {
+        const elSmoothButton = document.querySelector('#toggleAutoSmooth');
+        if (this.autoSmooth) {
+            elSmoothButton.classList.add('smooth-on');
+        } else {
+            elSmoothButton.classList.remove('smooth-on');
+        }
     }
 
     startDrawing(e) {
