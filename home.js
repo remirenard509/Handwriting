@@ -59,6 +59,7 @@ class DrawingApp {
         if (this.autoSmooth) {
             this.smooth();
         }
+        this.save();
     }
 
     draw(e) {
@@ -121,6 +122,7 @@ class DrawingApp {
             this.redoHistory.push(this.history.pop());
             this.redrawCanvas();
         }
+        this.save();
     }
 
     redo() {
@@ -128,12 +130,14 @@ class DrawingApp {
             this.history.push(this.redoHistory.pop());
             this.redrawCanvas();
         }
+        this.save();
     }
 
     clear() {
         this.history = [];
         this.redoHistory = [];
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.save();
     }
 
     redrawCanvas() {
@@ -148,42 +152,61 @@ class DrawingApp {
         });
     }
     save() {
-        this.svgContent = '';
-        this.svgContent += '<?xml version="1.0" encoding="UTF-8"?>\n';
-        this.svgContent += '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="800" height="400">\n';
-        for (let i = 0; i < this.history.length; i++) {
-            let stroke = this.history[i];
-            //stroke = this.roundPoints(stroke);           
-            this.svgContent += `<path d="${this.bodysvg(stroke)}" stroke="black" fill="none" />\n`;
-        }
-        this.svgContent += '</svg>';
-        this.saveSvgToLocalStorage(this.svgContent);
-        this.printSvg();
+        this.printCenteredSvg(this.history);
     }
 
-    bodysvg(points) {
-        if (points.length === 0) return "";
+    centerPoints(pointsArray) {
+        let allPoints = pointsArray.flat();
     
-        let path = `M ${points[0].x} ${points[0].y}`;
+        const minX = Math.min(...allPoints.map(p => p.x));
+        const maxX = Math.max(...allPoints.map(p => p.x));
+        const minY = Math.min(...allPoints.map(p => p.y));
+        const maxY = Math.max(...allPoints.map(p => p.y));
     
-        for (let i = 1; i < points.length; i++) {
-            path += ` L ${points[i].x} ${points[i].y}`;
-        }
+        const centerX = (minX + maxX) / 2;
+        const centerY = (minY + maxY) / 2;
     
-        return path;
+        const centeredPointsArray = pointsArray.map(points =>
+            points.map(p => ({
+                x: p.x - centerX,
+                y: p.y - centerY
+            }))
+        );
+    
+        return {
+            centeredPointsArray,
+            width: maxX - minX,
+            height: maxY - minY
+        };
     }
 
-    saveSvgToLocalStorage(svgContent) {
-        localStorage.setItem('svgFile', svgContent);
-    }
-    loadSvgFromLocalStorage() {
-        return localStorage.getItem('svgFile');
+    generateSvgCentered(pointsArray) {
+        const { centeredPointsArray, width, height } = this.centerPoints(pointsArray);
+    
+        const padding = Math.max(width, height) * 0.1;
+        const viewBox = `${-width / 2 - padding} ${-height / 2 - padding} ${width + 2 * padding} ${height + 2 * padding}`;
+    
+        let svgContent = `<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="${viewBox}">`;
+    
+        centeredPointsArray.forEach(points => {
+            svgContent += `<path d="M ${points.map(p => `${p.x} ${p.y}`).join(" L ")}" stroke="black" fill="none"/>`;
+        });
+    
+        svgContent += `</svg>`;
+        return svgContent;
     }
 
-    printSvg() {
-        let svgContent = this.loadSvgFromLocalStorage();
-        let win = window.open();
-        win.document.write(svgContent);
+    printCenteredSvg(pointsArray) {
+        const svgString = this.generateSvgCentered(pointsArray);
+        const svgContainer = document.querySelector('#svgContainer1');
+    
+        svgContainer.innerHTML = svgString;
+        svgContainer.style.overflow = 'hidden';
+
+        const svgContainer2 = document.querySelector('#svgContainer2');
+    
+        svgContainer2.innerHTML = svgString;
+        svgContainer2.style.overflow = 'hidden';
     }
 
     roundPoints(points) {
