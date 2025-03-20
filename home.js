@@ -9,7 +9,7 @@ class DrawingApp {
         this.history = [];
         this.redoHistory = [];
         this.autoSmooth = false;
-        this.lineWidth = 5;
+        this.lineWidth = 2;
         this.svgContent = '';
         this.svgContent = '';
 
@@ -82,7 +82,6 @@ class DrawingApp {
 
         this.lastX = x;
         this.lastY = y;
-        console.log(this.history);
     }
 
     smoothStroke(x, y) {
@@ -154,6 +153,7 @@ class DrawingApp {
         this.svgContent += '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="800" height="400">\n';
         for (let i = 0; i < this.history.length; i++) {
             let stroke = this.history[i];
+            //stroke = this.roundPoints(stroke);           
             this.svgContent += `<path d="${this.bodysvg(stroke)}" stroke="black" fill="none" />\n`;
         }
         this.svgContent += '</svg>';
@@ -184,6 +184,13 @@ class DrawingApp {
         let svgContent = this.loadSvgFromLocalStorage();
         let win = window.open();
         win.document.write(svgContent);
+    }
+
+    roundPoints(points) {
+        return points.map(point => ({
+            x: Math.round(point.x * 100) / 100,
+            y: Math.round(point.y * 100) / 100
+        }));
     }
 
     run() {
