@@ -31,9 +31,7 @@ class DrawingApp {
         document.getElementById('toggleAutoSmooth').addEventListener('click', () => {
             this.autoSmooth = !this.autoSmooth;
             this.smoothButtonStatus();
-    });
-        document.getElementById('save').addEventListener('click', () => this.save());
-        document.getElementById('save').addEventListener('click', () => this.save());
+        });
     }
 
     smoothButtonStatus() {
@@ -59,7 +57,7 @@ class DrawingApp {
         if (this.autoSmooth) {
             this.smooth();
         }
-        this.save();
+        this.printCenteredSvg(this.history);
     }
 
     draw(e) {
@@ -122,7 +120,7 @@ class DrawingApp {
             this.redoHistory.push(this.history.pop());
             this.redrawCanvas();
         }
-        this.save();
+        this.printCenteredSvg(this.history);
     }
 
     redo() {
@@ -130,14 +128,14 @@ class DrawingApp {
             this.history.push(this.redoHistory.pop());
             this.redrawCanvas();
         }
-        this.save();
+        this.printCenteredSvg(this.history);
     }
 
     clear() {
         this.history = [];
         this.redoHistory = [];
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.save();
+        this.printCenteredSvg(this.history);
     }
 
     redrawCanvas() {
@@ -150,9 +148,6 @@ class DrawingApp {
             this.ctx.stroke();
             this.ctx.closePath();
         });
-    }
-    save() {
-        this.printCenteredSvg(this.history);
     }
 
     centerPoints(pointsArray) {
@@ -181,6 +176,7 @@ class DrawingApp {
     }
 
     generateSvgCentered(pointsArray) {
+        if (pointsArray.length === 0) return '';
         const { centeredPointsArray, width, height } = this.centerPoints(pointsArray);
     
         const padding = Math.max(width, height) * 0.1;
