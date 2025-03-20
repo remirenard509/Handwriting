@@ -154,7 +154,7 @@ class DrawingApp {
         this.svgContent += '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="800" height="400">\n';
         for (let i = 0; i < this.history.length; i++) {
             let stroke = this.history[i];
-            this.bodysvg(stroke);
+            this.svgContent += `<path d="${this.bodysvg(stroke)}" stroke="black" fill="none" />\n`;
         }
         this.svgContent += '</svg>';
         this.saveSvgToLocalStorage(this.svgContent);
@@ -162,12 +162,17 @@ class DrawingApp {
     }
 
     bodysvg(points) {
-        for (let i = 0; i < points.length - 1; i++) {
-            let p1 = points[i];
-            let p2 = points[i + 1];
-            this.svgContent += `<line x1="${p1.x}" y1="${p1.y}" x2="${p2.x}" y2="${p2.y}" stroke="black" stroke-width="2" />\n`;
+        if (points.length === 0) return "";
+    
+        let path = `M ${points[0].x} ${points[0].y}`;
+    
+        for (let i = 1; i < points.length; i++) {
+            path += ` L ${points[i].x} ${points[i].y}`;
         }
+    
+        return path;
     }
+
     saveSvgToLocalStorage(svgContent) {
         localStorage.setItem('svgFile', svgContent);
     }
