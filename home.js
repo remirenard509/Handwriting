@@ -198,11 +198,6 @@ class DrawingApp {
     
         svgContainer.innerHTML = svgString;
         svgContainer.style.overflow = 'hidden';
-
-        const svgContainer2 = document.querySelector('#svgContainer2');
-    
-        svgContainer2.innerHTML = svgString;
-        svgContainer2.style.overflow = 'hidden';
     }
 
     roundPoints(points) {
