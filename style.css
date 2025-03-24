@@ -1,3 +1,12 @@
+body {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    background-color: #f0f0f0;
+    margin: 0px;
+}
+
 #canvas {
     border: 3px solid black;
     border-radius: 10px;  
@@ -14,7 +23,6 @@ h1 {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #f0f0f0;
     font-family: Arial, sans-serif;
     text-align: center;
     flex-direction: row;
@@ -47,3 +55,21 @@ button:hover {
     background-color: #729d9f;
 }
 
+#svgContainer1 {
+    height: 80px; 
+    width: 80px; 
+    position: absolute;
+    z-index: 1;
+    bottom:260px;
+    box-shadow: 0px 0px 5px 2px white;
+    border-radius: 5px;
+}
+
+#image img{
+    border-radius: 10px;
+}
+
+.preview {
+    display: flex;
+    justify-content: center;
+}
